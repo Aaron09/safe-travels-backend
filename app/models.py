@@ -29,6 +29,6 @@ class Review(models.Model):
 
 
 class Crime(models.Model):
-    county_id = models.ForeignKey(County, on_delete=models.CASCADE)
+    county = models.ForeignKey(County, on_delete=models.CASCADE)
     count = models.FloatField()
     type = models.TextField()
