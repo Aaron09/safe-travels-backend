@@ -38,6 +38,7 @@ class CreateReview extends Component {
           <br />
           Rating:
           <input value={this.state.rating} onChange={e => this.setState({ rating: parseInt(e.target.value) })}/>
+          <br />
           <button onClick={this.onPost}>Submit</button>
         </form>
       </div>

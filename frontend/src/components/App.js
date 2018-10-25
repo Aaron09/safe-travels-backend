@@ -8,7 +8,10 @@ class App extends Component {
     return (
       <div className="App">
         <header className="App-header">
+          <CountyInfo id={1} />
+          <hr />
           <CreateReview id={1} />
+          <hr />
           <ReviewInfo id={1} />
         </header>
       </div>

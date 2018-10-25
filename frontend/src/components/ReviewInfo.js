@@ -22,11 +22,11 @@ class ReviewInfo extends Component {
   render() {
     return (
       <div className="App">
-        {this.state.data.map((description, rating, timestamp) => (
+        {this.state.data.map(review => (
           <div>
-            <div>Description: {description}</div>
-            <div>Rating: {rating}</div>
-            <div>Timestamp: {timestamp}</div>
+            <div>Description: {review.description}</div>
+            <div>Rating: {review.rating}</div>
+            <div>Timestamp: {review.timestamp}</div>
             <br/>
           </div>
         ))}
