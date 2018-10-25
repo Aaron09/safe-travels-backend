@@ -1,7 +1,7 @@
 import React, { Component } from "react";
-import CountyInfo from './CountyInfo'
-import CreateReview from './CreateReview'
-import ReviewInfo from './ReviewInfo'
+import CountyInfo from "./CountyInfo";
+import CreateReview from "./CreateReview";
+import ReviewInfo from "./ReviewInfo";
 
 class App extends Component {
   render() {

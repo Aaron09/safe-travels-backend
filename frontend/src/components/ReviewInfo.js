@@ -1,22 +1,25 @@
-import React, { Component } from "react"
-import axios from 'axios'
+import React, { Component } from "react";
+import axios from "axios";
 
-const backend_url = "http://127.0.0.1:8000/"
+const backend_url = "http://127.0.0.1:8000/";
 
 class ReviewInfo extends Component {
   constructor(props) {
-    super(props)
-    this.state = { data: [] }
+    super(props);
+    this.state = { data: [] };
   }
 
   componentDidMount() {
-    axios.get(backend_url + "review/all/" + this.props.id).then(response => {
-      this.setState({
-        data: response.data.reviews
+    axios
+      .get(backend_url + "review/all/" + this.props.id)
+      .then(response => {
+        this.setState({
+          data: response.data.reviews
+        });
       })
-    }).catch(e => {
-      console.log(e)
-    })
+      .catch(e => {
+        console.log(e);
+      });
   }
 
   render() {
@@ -27,7 +30,7 @@ class ReviewInfo extends Component {
             <div>Description: {review.description}</div>
             <div>Rating: {review.rating}</div>
             <div>Timestamp: {review.timestamp}</div>
-            <br/>
+            <br />
           </div>
         ))}
       </div>
@@ -35,4 +38,4 @@ class ReviewInfo extends Component {
   }
 }
 
-export default ReviewInfo
+export default ReviewInfo;
