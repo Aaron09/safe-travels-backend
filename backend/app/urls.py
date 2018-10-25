@@ -21,4 +21,7 @@ from . import views
 urlpatterns = [
     url(r'^county/(?P<county_id>\d+)/$', views.county_information, name='county_information'),
     url(r'^review/all/(?P<county_id>\d+)/$', views.county_reviews, name='county_reviews'),
+    url(r'^review/create/(?P<county_id>\d+)/$', views.review_create, name="review_create"),
+    url(r'^review/edit/(?P<review_id>\d+)/$', views.review_edit, name="review_edit"),
+    url(r'^review/delete/(?P<review_id>\d+)/$', views.review_delete, name="review_delete"),
 ]
