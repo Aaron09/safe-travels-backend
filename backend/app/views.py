@@ -5,6 +5,7 @@ from django.db import connection
 from app.models import County, Review
 from datetime import datetime
 from textwrap import dedent
+from django.views.decorators.csrf import csrf_exempt
 import json
 
 
@@ -27,10 +28,11 @@ def county_reviews(request, county_id):
     reviews = [raw_review["fields"] for raw_review in raw_review_data]
     return JsonResponse({"reviews": reviews})
 
-
+@csrf_exempt
 def review_create(request, county_id):
-    description = request.POST["description"]
-    rating = request.POST["rating"]
+    data = json.loads(request.body.decode('utf-8'))
+    description = data["description"]
+    rating = data["rating"]
     user = 1
     timestamp = datetime.now()
 
