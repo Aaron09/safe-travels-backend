@@ -58,9 +58,6 @@ class ReviewCreateTestCase(TestCase):
         data = {
             "description": "This place was great",
             "rating": 8,
-            "county": self.county,
-            "user": self.user,
-            "timestamp": datetime.now()
         }
         self.client.post('/review/create/1/', data=data)
         response = self.client.get('/review/all/1/')
@@ -85,7 +82,6 @@ class ReviewEditTestCase(TestCase):
         data = {
             "description": "This place was awful",
             "rating": 4,
-            "user": self.user,
         }
         response = self.client.get('/review/all/1/')
         review = response.json()["reviews"][0]
