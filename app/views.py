@@ -38,7 +38,7 @@ def review_create(request, county_id):
     data = json.loads(request.body.decode('utf-8'))
     description = data["description"]
     rating = data["rating"]
-    user = 1
+    user = 2
     timestamp = datetime.now()
 
     query = "\
@@ -59,7 +59,7 @@ def review_edit(request, review_id):
     data = json.loads(request.body.decode('utf-8'))
     description = data["description"]
     rating = data["rating"]
-    user = 1
+    user = 2
     timestamp = datetime.now()
 
     query = "\
