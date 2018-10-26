@@ -26,7 +26,8 @@ SECRET_KEY = 'ib$_5zzjdcn6z)ebr=x0+d1&wk#*^3-_zlb=3839kheo*1x3i2'
 DEBUG = True
 
 ALLOWED_HOSTS = [
-    '127.0.0.1'
+    '127.0.0.1',
+    'https://safetravels-frontend.herokuapp.com/'
 ]
 
 
