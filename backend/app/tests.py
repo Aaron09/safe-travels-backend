@@ -2,6 +2,7 @@ from django.test import TestCase
 from django.test import Client
 from datetime import datetime
 from .models import County, Review, User
+import json
 
 class CountyInformationTestCase(TestCase):
 
@@ -59,7 +60,8 @@ class ReviewCreateTestCase(TestCase):
             "description": "This place was great",
             "rating": 8,
         }
-        self.client.post('/review/create/1/', data=data)
+
+        self.client.post('/review/create/1/', data=json.dumps(data), content_type='application/json')
         response = self.client.get('/review/all/1/')
         assert len(response.json()["reviews"]) == 1
 
@@ -88,7 +90,7 @@ class ReviewEditTestCase(TestCase):
         assert review["rating"] == 8
         assert review["description"] == "This place was great"
 
-        self.client.post('/review/edit/1/', data=data)
+        self.client.post('/review/edit/1/', data=json.dumps(data), content_type='application/json')
 
         response = self.client.get('/review/all/1/')
         review = response.json()["reviews"][0]

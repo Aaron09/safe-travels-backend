@@ -25,7 +25,12 @@ def county_reviews(request, county_id):
     )
     raw_review_data = json.loads(serialized_result)
 
-    reviews = [raw_review["fields"] for raw_review in raw_review_data]
+    reviews = []
+    for raw_review in raw_review_data:
+        fields = raw_review["fields"]
+        fields.update({'id': raw_review['pk']})
+        reviews.append(fields)
+
     return JsonResponse({"reviews": reviews})
 
 @csrf_exempt
@@ -49,9 +54,11 @@ def review_create(request, county_id):
     return HttpResponse(200)
 
 
+@csrf_exempt
 def review_edit(request, review_id):
-    description = request.POST["description"]
-    rating = request.POST["rating"]
+    data = json.loads(request.body.decode('utf-8'))
+    description = data["description"]
+    rating = data["rating"]
     user = 1
     timestamp = datetime.now()
 
@@ -68,6 +75,7 @@ def review_edit(request, review_id):
     return HttpResponse(200)
 
 
+@csrf_exempt
 def review_delete(request, review_id):
     query = "\
         delete from app_review \
