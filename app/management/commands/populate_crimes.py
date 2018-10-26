@@ -42,7 +42,7 @@ class Command(BaseCommand):
 
         for type in types:
             type_name = type_map[type]
-            crime = Crime(county_id=county, count=row[type], type=type_name)
+            crime = Crime(county_id=county.id, count=row[type], type=type_name)
             crime.save()
 
 
