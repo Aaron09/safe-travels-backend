@@ -108,10 +108,6 @@ def add_picture(request, county_id):
 
     remote_id = ''.join(random.choice(string.ascii_uppercase + string.digits) for _ in range(20))
 
-    # session = boto3.Session(
-    #     aws_access_key_id="AKIAIXAPDSXSUVVA7LTQ",
-    #     aws_secret_access_key="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",
-    # )
     s3 = boto3.resource('s3')
     s3.Bucket('safetravels-pictures').put_object(Key=remote_id, Body=img)
 
