@@ -6,7 +6,9 @@ from app.models import County, Review, Picture
 from datetime import datetime
 from textwrap import dedent
 from django.views.decorators.csrf import csrf_exempt
+import boto3
 import json
+import random, string
 
 
 def county_information(request, county_id):
@@ -102,7 +104,24 @@ def review_delete(request, review_id):
 
 @csrf_exempt
 def add_picture(request, county_id):
-    print(len(request.FILES))
-    img = request.FILES["image"]
+    img = request.FILES.get("image")
+
+    remote_id = ''.join(random.choice(string.ascii_uppercase + string.digits) for _ in range(20))
+
+    # session = boto3.Session(
+    #     aws_access_key_id="AKIAIXAPDSXSUVVA7LTQ",
+    #     aws_secret_access_key="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",
+    # )
+    s3 = boto3.resource('s3')
+    s3.Bucket('safetravels-pictures').put_object(Key=remote_id, Body=img)
+
+    remote_path = "https://s3.amazonaws.com/safetravels-pictures/" + remote_id
+
+    Picture.objects.create(
+        file_url=remote_path,
+        county_id=county_id,
+        user_id=2,
+        timestamp=datetime.now()
+    )
 
     return HttpResponse(200)
