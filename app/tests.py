@@ -1,14 +1,21 @@
 from django.test import TestCase
 from django.test import Client
 from datetime import datetime
-from .models import County, Review, User
+from .models import County, Review, User, Picture
 import json
 
 class CountyInformationTestCase(TestCase):
 
     def setUp(self):
         self.client = Client()
-        County.objects.create(name="Jefferson", state="KY", population=10)
+        county = County.objects.create(name="Jefferson", state="KY", population=10)
+        user = User.objects.create(username="Angad", age=10, gender="F")
+        Picture.objects.create(
+            file_url="https://url.com",
+            county=county,
+            user=user,
+            timestamp=datetime.now()
+        )
 
     def test_get_county_info(self):
         response = self.client.get('/county/1/')
@@ -17,6 +24,8 @@ class CountyInformationTestCase(TestCase):
         assert info["name"] == "Jefferson"
         assert info["state"] == "KY"
         assert info["population"] == 10
+        assert len(info["image_urls"]) == 1
+        assert info["image_urls"][0] == "https://url.com"
 
 
 class GetCountyReviewsTestCase(TestCase):

@@ -2,7 +2,7 @@ from django.shortcuts import render
 from django.http import JsonResponse, HttpResponse
 from django.core import serializers
 from django.db import connection
-from app.models import County, Review
+from app.models import County, Review, Picture
 from datetime import datetime
 from textwrap import dedent
 from django.views.decorators.csrf import csrf_exempt
@@ -14,7 +14,18 @@ def county_information(request, county_id):
     result = County.objects.raw(query)
     serialized_result = serializers.serialize("json", result, fields=('name', 'state', 'population'))
     raw_county_data = json.loads(serialized_result)[0]
-    return JsonResponse(raw_county_data["fields"])
+
+    response = raw_county_data["fields"]
+
+    query = "select file_url from app_picture where county_id={0}".format(county_id)
+
+    with connection.cursor() as cursor:
+        result = cursor.execute(query)
+        image_urls = [row[0] for row in result.fetchall()]
+
+    response["image_urls"] = image_urls
+
+    return JsonResponse(response)
 
 
 def county_reviews(request, county_id):
@@ -85,5 +96,13 @@ def review_delete(request, review_id):
     query = dedent(query)
     with connection.cursor() as cursor:
         result = cursor.execute(query)
+
+    return HttpResponse(200)
+
+
+@csrf_exempt
+def add_picture(request, county_id):
+    print(len(request.FILES))
+    img = request.FILES["image"]
 
     return HttpResponse(200)
