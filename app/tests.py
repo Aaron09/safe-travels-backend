@@ -1,7 +1,7 @@
 from django.test import TestCase
 from django.test import Client
 from datetime import datetime
-from .models import County, Review, User, Picture
+from .models import County, Review, User, Picture, Crime
 import json
 
 class CountyInformationTestCase(TestCase):
@@ -16,6 +16,17 @@ class CountyInformationTestCase(TestCase):
             user=user,
             timestamp=datetime.now()
         )
+        Crime.objects.create(
+            county=county,
+            type="violent",
+            count=100
+        )
+        Crime.objects.create(
+            county=county,
+            type="not bad",
+            count=20
+        )
+
 
     def test_get_county_info(self):
         response = self.client.get('/county/1/')

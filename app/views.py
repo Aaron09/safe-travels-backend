@@ -20,12 +20,18 @@ def county_information(request, county_id):
     response = raw_county_data["fields"]
 
     query = "select file_url from app_picture where county_id={0}".format(county_id)
-
     with connection.cursor() as cursor:
         result = cursor.execute(query)
         image_urls = [row[0] for row in result.fetchall()]
 
     response["image_urls"] = image_urls
+
+    query = "select * from app_crime where county_id={0}".format(county_id)
+    with connection.cursor() as cursor:
+        result = cursor.execute(query)
+        crimes = [{"count": row[1], "type": row[2]} for row in cursor.fetchall()]
+
+    response["crimes"] = crimes
 
     return JsonResponse(response)
 
