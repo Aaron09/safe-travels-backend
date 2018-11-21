@@ -9,6 +9,16 @@ from django.views.decorators.csrf import csrf_exempt
 import boto3
 import json
 import random, string
+from app.models import County
+
+
+def counties(request):
+    query = "select * from app_county"
+    result = County.objects.raw(query)
+    serialized_result = serializers.serialize("json", result, fields=('name', 'state'))
+    response = json.loads(serialized_result)
+
+    return JsonResponse({ "counties": response })
 
 
 def county_information(request, county_id):
