@@ -46,6 +46,14 @@ def county_information(request, county_id):
 
     return JsonResponse(response)
 
+def county_rating(request, county_id):
+    query = "select * from (select name, county_id, avg(rating) as rating from app_county join app_review on app_review.county_id = app_county.id) where county_id={0}".format(county_id)
+    with connection.cursor() as cursor:
+        cursor.execute(query)
+        result = cursor.fetchall()
+
+    return JsonResponse({"rating": result})
+
 def county_similar(request, county_id):
     county_id = int(county_id)
     query = "select * from app_county"
