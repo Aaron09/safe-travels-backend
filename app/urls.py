@@ -20,6 +20,7 @@ from . import views
 
 urlpatterns = [
     url(r'^county/$', views.counties, name="counties"),
+    url(r'^county_similar/(?P<county_id>\d+)/$', views.county_similar, name='county_similar'),
     url(r'^county/(?P<county_id>\d+)/$', views.county_information, name='county_information'),
     url(r'^picture/new/(?P<county_id>\d+)/$', views.add_picture, name="add_picture"),
     url(r'^review/all/(?P<county_id>\d+)/$', views.county_reviews, name='county_reviews'),

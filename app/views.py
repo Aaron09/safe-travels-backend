@@ -9,6 +9,7 @@ from django.views.decorators.csrf import csrf_exempt
 import boto3
 import json
 import random, string
+import numpy as np
 from app.models import County
 
 
@@ -44,6 +45,50 @@ def county_information(request, county_id):
     response["crimes"] = crimes
 
     return JsonResponse(response)
+
+def county_similar(request, county_id):
+    county_id = int(county_id)
+    query = "select * from app_county"
+    with connection.cursor() as cursor:
+        cursor.execute(query)
+        counties = [{"id": row[0], "population": row[3], "name": row[1], "state": row[2]} for row in cursor.fetchall()]
+
+    county_to_pop_dict = {}
+    count_to_name_dict = {}
+    for county in counties:
+        county_to_pop_dict[county["id"]] = county["population"]
+        count_to_name_dict[county["id"]] = county["name"]
+
+    # Query all of the crimes
+    query = "select * from app_crime"
+    with connection.cursor() as cursor:
+        cursor.execute(query)
+        crimes = [{"county": row[3], "count": row[1], "type": row[2]} for row in cursor.fetchall()]
+
+    county_to_crime_list_dict = {}
+    crime_types = ["Murder", "Rape", "Robbery", "Aggravated Assault", "Burglary", "Larceny", "Motor Vehicle Theft", "Arson"]
+
+    for crime in crimes:
+        id = crime["county"]
+        population = county_to_pop_dict[county_id]
+        crime_type = crime["type"]
+        crime_percentage = crime["count"] / population
+        if id not in county_to_crime_list_dict:
+            county_to_crime_list_dict[id] = np.zeros(len(crime_types))
+        county_to_crime_list_dict[id][crime_types.index(crime_type)] = crime_percentage
+
+    county_percentages = county_to_crime_list_dict[county_id]
+    distance_list = []
+
+    for key, val in county_to_crime_list_dict.items():
+        distance = np.linalg.norm(county_percentages - val)
+        distance_list.append((distance, key))
+
+    sorted_values = sorted(distance_list, key=lambda a: a[0])[1:11]
+    print(sorted_values)
+
+    counties = [{"name": count_to_name_dict[item[1]], "county_id": item[1]} for item in sorted_values]
+    return JsonResponse({"counties": counties})
 
 
 def county_reviews(request, county_id):
